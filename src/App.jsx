@@ -61,9 +61,10 @@ function App() {
         </div>
       </div>
       <div className="card__list">
-        {currentMovies.map((movie) => (
+        {currentMovies.map((movie, index) => (
           <Card
             key={movie.id}
+            index={index}
             id={movie.id}
             title={movie.title}
             category={movie.category}

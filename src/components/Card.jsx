@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 
 
-function Card({ id, title, category, likes, dislikes, liked, disliked, backgroundColor, onDelete }) {
+function Card({ id, title, category, likes, dislikes, liked, disliked, backgroundColor, onDelete, index }) {
   const dispatch = useDispatch();
 
   const [showDialog, setShowDialog] = useState(false);
@@ -52,7 +52,7 @@ function Card({ id, title, category, likes, dislikes, liked, disliked, backgroun
       opacity: 0,
       y: 50,
       ease: "power2.out",
-      delay: 0.01 * id
+      delay: 0.05 * index
     });
   }
   , []);

@@ -53,12 +53,12 @@
     color: white;
     transition: all .3s ease;
     padding: .3rem .8rem;
-    background-color: red;
+    background-color: #DB5461;
     box-shadow: white 0 0 2rem 2px; 
     &:hover{
-        color: red;
+        color: #DB5461;
         background-color: white;
-        box-shadow: red 0 0 2rem;
+        box-shadow: #DB5461 0 0 2rem;
 
     }
 }
