@@ -1,12 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { movies$ } from '../assets/data/movies';
 
-// Helper function to generate a random color
 const generateRandomColor = () => {
   return "#" + Math.floor(Math.random() * 16777215).toString(16);
 };
 
-// Helper function for sorting
 const sortMovies = (movies, sortBy) => {
   return movies.slice().sort((a, b) => {
     if (sortBy === 'titleAsc') {
@@ -27,7 +25,7 @@ export const fetchMovies = createAsyncThunk('movies/fetchMovies', async () => {
   const response = await new Promise((resolve) => {
     setTimeout(() => {
       resolve(movies$);
-    }, 3000); // 3 seconds delay
+    }, 3000); 
   });
   return response;
 });
@@ -127,7 +125,7 @@ const moviesSlice = createSlice({
           ...movie,
           liked: false,
           disliked: false,
-          backgroundColor: generateRandomColor(), // Add random background color
+          backgroundColor: generateRandomColor(), 
         }));
         state.filteredList = sortMovies(state.list, state.sortBy);
         state.categories = [...new Set(movies.map(movie => movie.category))];
@@ -148,7 +146,7 @@ export const {
   setSelectedCategories,
   setItemsPerPage,
   setCurrentPage,
-  setSortBy, // Export the new action
+  setSortBy,
 } = moviesSlice.actions;
 
 export default moviesSlice.reducer;

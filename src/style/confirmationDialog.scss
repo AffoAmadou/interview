@@ -1,0 +1,47 @@
+.confirmation__dialog{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.confirmation__dialog__content{
+   background-color: white;
+   width: 30%;
+   padding: 2rem;
+
+
+   p{
+         font-size: 1.8rem;
+         margin-bottom: 3rem;
+   }
+}
+
+.confirmation__dialog__actions{
+    display: flex;
+    margin-top: 3rem;
+    gap: 2rem;
+
+    button{
+        padding: 1rem 2rem;
+        font-size: 1.8rem;
+        border: none;
+        cursor: pointer;
+
+        &:first-child{
+            background-color: #f44336;
+            color: white;
+        }
+
+        &:last-child{
+            background-color: #4CAF50;
+            color: white;
+        }
+    }
+}

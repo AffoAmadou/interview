@@ -1,10 +1,17 @@
 import { useDispatch } from 'react-redux';
 import { toggleLike, toggleDislike } from '../slices/moviesSlice';
+import ConfirmationDialog from "./ConfirmationDialog";
 import Like from "./like";
 import Dislike from "./dislike";
+import { useState, useRef, useEffect } from 'react';
+import gsap from 'gsap';
+
 
 function Card({ id, title, category, likes, dislikes, liked, disliked, backgroundColor, onDelete }) {
   const dispatch = useDispatch();
+
+  const [showDialog, setShowDialog] = useState(false);
+  const cardRef = useRef(null);
 
   const handleLike = () => {
     dispatch(toggleLike(id));
@@ -15,13 +22,44 @@ function Card({ id, title, category, likes, dislikes, liked, disliked, backgroun
   };
 
   const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this movie?")) {
-      onDelete();
-    }
+    setShowDialog(true);
   };
 
+  const confirmDelete = () => {
+    gsap.to(cardRef.current, {
+       duration: 0.5,
+        opacity: 0, 
+        onStart: () => {
+          setShowDialog(false);
+        },
+       onComplete: 
+        () =>
+        {
+          onDelete();
+        }
+        });
+
+
+  };
+
+  const cancelDelete = () => {
+    setShowDialog(false);
+  };
+
+  useEffect(() => {
+    gsap.from(cardRef.current, {
+      duration: 0.5,
+      opacity: 0,
+      y: 50,
+      ease: "power2.out",
+      delay: 0.01 * id
+    });
+  }
+  , []);
+
   return (
-    <div className="card">
+    <>
+    <div ref={cardRef} className="card">
       <div className="card__poster" style={{ backgroundColor }}>
         <button className="delete" onClick={handleDelete}>X</button>
       </div>
@@ -43,7 +81,19 @@ function Card({ id, title, category, likes, dislikes, liked, disliked, backgroun
           <p className="dislike__number">{dislikes}</p>
         </button>
       </div>
+
+      
+
     </div>
+
+    {showDialog && (
+        <ConfirmationDialog
+          message={"Are you sure you want to delete : " + title + " ?"} 
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
+    </>
   );
 }
 
