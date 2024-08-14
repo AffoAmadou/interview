@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   rollupOptions: {
-    external: ['@reduxjs/toolkit', 'react-redux'],
+    external: [ 'react-redux', '@reduxjs/toolkit'],
   },
 })
