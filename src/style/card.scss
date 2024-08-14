@@ -15,6 +15,7 @@
     aspect-ratio: 1/1;
     margin-bottom: 1.6rem;
     position: relative;
+    background-color: #939393;
 
     img {
         width: 100%;
@@ -25,8 +26,8 @@
 
     button{
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 1rem;
+        right: 1rem;
     }
 }
 
@@ -50,6 +51,16 @@
 
 .delete{
     font-size: 3rem;
-    background-color: red;
+    font-weight: bold;
     color: white;
+    transition: all .3s ease;
+    padding: .3rem .8rem;
+    background-color: red;
+    box-shadow: white 0 0 2rem 2px; 
+    &:hover{
+        color: red;
+        background-color: white;
+        box-shadow: red 0 0 2rem;
+
+    }
 }

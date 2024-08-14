@@ -1,8 +1,34 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { movies$ } from '../assets/data/movies';
 
+// Helper function to generate a random color
+const generateRandomColor = () => {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+};
+
+// Helper function for sorting
+const sortMovies = (movies, sortBy) => {
+  return movies.slice().sort((a, b) => {
+    if (sortBy === 'titleAsc') {
+      return a.title.localeCompare(b.title);
+    } else if (sortBy === 'titleDesc') {
+      return b.title.localeCompare(a.title);
+    } else if (sortBy === 'likesAsc') {
+      return a.likes - b.likes;
+    } else if (sortBy === 'likesDesc') {
+      return b.likes - a.likes;
+    } else {
+      return 0;
+    }
+  });
+};
+
 export const fetchMovies = createAsyncThunk('movies/fetchMovies', async () => {
-  const response = await movies$;
+  const response = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(movies$);
+    }, 3000); // 3 seconds delay
+  });
   return response;
 });
 
@@ -17,14 +43,15 @@ const moviesSlice = createSlice({
     itemsPerPage: 4,
     loading: false,
     error: null,
+    sortBy: 'titleAsc', // Default sorting
   },
   reducers: {
     deleteMovie: (state, action) => {
       const updatedList = state.list.filter(movie => movie.id !== action.payload);
       state.list = updatedList;
-      state.filteredList = updatedList.filter(movie =>
+      state.filteredList = sortMovies(updatedList.filter(movie =>
         state.selectedCategories.length === 0 || state.selectedCategories.includes(movie.category)
-      );
+      ), state.sortBy);
       state.categories = [...new Set(updatedList.map(movie => movie.category))];
       state.currentPage = 1;
     },
@@ -43,9 +70,9 @@ const moviesSlice = createSlice({
         return movie;
       });
       state.list = updatedList;
-      state.filteredList = updatedList.filter(movie =>
+      state.filteredList = sortMovies(updatedList.filter(movie =>
         state.selectedCategories.length === 0 || state.selectedCategories.includes(movie.category)
-      );
+      ), state.sortBy);
     },
     toggleDislike: (state, action) => {
       const updatedList = state.list.map(movie => {
@@ -62,18 +89,18 @@ const moviesSlice = createSlice({
         return movie;
       });
       state.list = updatedList;
-      state.filteredList = updatedList.filter(movie =>
+      state.filteredList = sortMovies(updatedList.filter(movie =>
         state.selectedCategories.length === 0 || state.selectedCategories.includes(movie.category)
-      );
+      ), state.sortBy);
     },
     setCategories: (state, action) => {
       state.categories = action.payload;
     },
     setSelectedCategories: (state, action) => {
       state.selectedCategories = action.payload;
-      state.filteredList = state.list.filter(movie =>
+      state.filteredList = sortMovies(state.list.filter(movie =>
         state.selectedCategories.length === 0 || state.selectedCategories.includes(movie.category)
-      );
+      ), state.sortBy);
       state.currentPage = 1;
     },
     setItemsPerPage: (state, action) => {
@@ -82,6 +109,10 @@ const moviesSlice = createSlice({
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
+    },
+    setSortBy: (state, action) => {
+      state.sortBy = action.payload;
+      state.filteredList = sortMovies(state.filteredList, state.sortBy);
     },
   },
   extraReducers: (builder) => {
@@ -96,8 +127,9 @@ const moviesSlice = createSlice({
           ...movie,
           liked: false,
           disliked: false,
+          backgroundColor: generateRandomColor(), // Add random background color
         }));
-        state.filteredList = state.list;
+        state.filteredList = sortMovies(state.list, state.sortBy);
         state.categories = [...new Set(movies.map(movie => movie.category))];
         state.loading = false;
       })
@@ -116,6 +148,7 @@ export const {
   setSelectedCategories,
   setItemsPerPage,
   setCurrentPage,
+  setSortBy, // Export the new action
 } = moviesSlice.actions;
 
 export default moviesSlice.reducer;
